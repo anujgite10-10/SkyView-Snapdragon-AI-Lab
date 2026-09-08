@@ -277,7 +277,7 @@ Interactive OpenAPI documentation is available at `/docs` when the backend is ru
 
 ---
 
-## 📱 Mobile Application
+## Mobile Application
 
 A companion cross-platform Flutter application (`skyview_flutter_app/`) provides mobile access for farmers on the move:
 - **Direct APK Download**: [Download SkyView Mobile App (v1.0.0 APK)](https://drive.google.com/file/d/1sBlVT3V_VYpfahyRdAkAvfb5W17AWczf/view)
@@ -290,9 +290,9 @@ A companion cross-platform Flutter application (`skyview_flutter_app/`) provides
 ## Submission Details
 
 - **Challenge:** Snapdragon® AI Lab Build & Present Challenge
-- **Project Title:** SkyView AI: Multimodal Edge AI Workstation for Autonomous Smart Agriculture
+- **Project Title:** SkyView AI: Multi Agent Snapdragon® FPGA Accelerated Edge AI Workstation for Autonomous Smart Agriculture
 - **Sole Participant:** Anuj Gite
 - **Primary Target Silicon:** Qualcomm® Snapdragon® X Elite (45 TOPS Qualcomm® Hexagon™ NPU)
 - **AI Toolchain:** Qualcomm® AI Hub (QNN Execution Provider, ONNX Runtime)
 - **Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://google-hack-kgp5.vercel.app/)
-- **Direct Android APK Download:** [Download APK from GitHub Releases](https://github.com/anujgite10-10/SkyView-Snapdragon-AI-Lab/releases/latest)
+- **Direct Android APK Download:** [Download SkyView Mobile App (Google Drive)](https://drive.google.com/file/d/1sBlVT3V_VYpfahyRdAkAvfb5W17AWczf/view?usp=sharing)
