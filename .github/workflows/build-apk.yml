@@ -50,6 +50,7 @@ jobs:
         with:
           tag_name: v1.0.0
           name: SkyView AI Mobile App v1.0.0 (Snapdragon® AI Lab)
+          make_latest: true
           body: |
             ## 🌾 SkyView AI — Mobile App (Android APK)
             Automated production build for the **Snapdragon® AI Lab Build & Present Challenge**.

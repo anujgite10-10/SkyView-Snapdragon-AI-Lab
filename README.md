@@ -4,7 +4,8 @@ An end-to-end intelligent physical-to-intelligence agriculture platform designed
 
 Built for the **Snapdragon® AI Lab Build & Present Challenge**.  
 **Sole Developer & Participant:** Anuj Gite ([anuj.gite23@spit.ac.in](mailto:anuj.gite23@spit.ac.in))  
-**Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://google-hack-kgp5.vercel.app/)
+**Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://google-hack-kgp5.vercel.app/)  
+**Direct Mobile APK Download:** [Download SkyView Android APK (v1.0.0)](https://github.com/anujgite10-10/SkyView-Snapdragon-AI-Lab/releases/latest)
 
 ---
 
