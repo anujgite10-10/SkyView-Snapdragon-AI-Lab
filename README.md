@@ -5,7 +5,7 @@ An end-to-end intelligent physical-to-intelligence agriculture platform designed
 Built for the **Snapdragon® AI Lab Build & Present Challenge**.  
 **Sole Developer & Participant:** Anuj Gite ([anuj.gite23@spit.ac.in](mailto:anuj.gite23@spit.ac.in))  
 **Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://google-hack-kgp5.vercel.app/)  
-**Direct Mobile APK Download:** [Download SkyView Android APK (v1.0.0)](https://github.com/anujgite10-10/SkyView-Snapdragon-AI-Lab/releases/latest)
+**Direct Mobile APK Download:** [Download SkyView_AI-1.apk](./SkyView_AI-1.apk)
 
 ---
 
@@ -32,7 +32,7 @@ flowchart TD
         ESP32 -->|"LoRa 868 MHz (3.2 km)"| FPGA
     end
 
-    Camera["Field Camera / Drone Imagery<br/>(Crop Foliar Photos)"]
+    Camera["Field Camera / Smartphone Capture<br/>(Crop Foliar Photos)"]
 
     subgraph PC["Snapdragon-Powered HP PC (Qualcomm Snapdragon X Elite)"]
         subgraph AI_Hub["Qualcomm® AI Hub on Hexagon™ NPU (45 TOPS)"]
