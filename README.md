@@ -26,15 +26,13 @@ Built for the **Snapdragon® AI Lab Build & Present Challenge**.
 
 ```mermaid
 flowchart TD
-    subgraph Physical["PHYSICAL FIELD SENSING & PRE-PROCESSING"]
-        ESP32["<b>SOLAR ESP32 WEATHER STATION</b><br/><br/>12+ Micro-Climate Environmental Transducers<br/>Temperature • Humidity • Soil Moisture • Rain • Wind<br/>256-bit Encrypted Telemetry Transmitter"]
-        
-        FPGA["<b>AMD ZYNQ-7000 FPGA CO-PROCESSOR</b><br/><br/>Hardware Parallel Sensor Fusion & Rain IP Core<br/>0.16 ms Synthesized Pipeline Latency<br/>4.22x Measured Acceleration over CPU"]
-        
-        ESP32 ==>|"LoRa 868 MHz Long-Range Link (3.2 km)"| FPGA
+    subgraph FieldLayer["REMOTE PHYSICAL SENSING LAYER"]
+        ESP32["<b>SOLAR ESP32 WEATHER STATION</b><br/><br/>12+ Micro-Climate Environmental Transducers<br/>Temperature • Humidity • Soil Moisture • Rain • Wind<br/>Encrypted LoRa 868 MHz Transmitter"]
     end
 
     subgraph SnapdragonPC["SNAPDRAGON-POWERED HP PC WORKSTATION (QUALCOMM SNAPDRAGON X ELITE)"]
+        LoRaRx["<b>LORA RECEIVER GATEWAY</b><br/><br/>ESP32 USB/Serial Node (868 MHz)<br/>Direct Telemetry Ingestion to Host PC"]
+
         subgraph AI_Hub["QUALCOMM AI HUB ON HEXAGON NPU (45 TOPS)"]
             Vision["<b>CROP PATHOLOGY VISION MODEL</b><br/><br/>MobileNetV4 / YOLOv8 INT8 Quantized QNN<br/>4.8 ms Inference Latency on Hexagon NPU<br/>96.2% Top-1 Disease Classification Accuracy"]
             
@@ -50,6 +48,10 @@ flowchart TD
         end
     end
 
+    subgraph HardwareAcc["HARDWARE CO-PROCESSOR SUBSYSTEM"]
+        FPGA["<b>AMD ZYNQ-7000 FPGA CO-PROCESSOR</b><br/><br/>Hardware Parallel Sensor Fusion & Rain IP Core<br/>0.16 ms Synthesized Pipeline Latency<br/>4.22x Measured Acceleration over CPU"]
+    end
+
     subgraph Outputs["FARMER DELIVERY & INTERACTION CHANNELS"]
         Dashboard["<b>NATIVE HP PC DASHBOARD</b><br/><br/>Interactive React 18 3D Digital Twin<br/>Real-Time Touchscreen Farm Command UI"]
         
@@ -60,9 +62,13 @@ flowchart TD
         VoiceAgent["<b>AUTOMATED VOICE ADVISORY</b><br/><br/>Sarvam AI Regional Text-to-Speech<br/>Direct Vernacular Audio Phone Calls"]
     end
 
-    %% High-Speed Hardware Telemetry Flow
-    FPGA ==>|"Verified Telemetry Stream (USB/UART)"| Supervisor
-    FPGA -.->|"Telemetry Historical Archive"| DB
+    %% Remote Sensing to PC Gateway
+    ESP32 ==>|"LoRa 868 MHz Long-Range Link (3.2 km)"| LoRaRx
+    LoRaRx ==>|"Serial Telemetry Ingestion"| Supervisor
+    LoRaRx -.->|"Raw Sensor Archive"| DB
+
+    %% On-Demand FPGA Acceleration via UART
+    Supervisor <==>|"On-Demand Telemetry Query & 0.16ms Accelerated Result (UART)"| FPGA
 
     %% Qualcomm AI Hub NPU Diagnostics
     Vision ==>|"Foliar Pathogen Vector & Severity"| Supervisor
@@ -84,6 +90,7 @@ flowchart TD
 
     %% High-Contrast Styling & Increased Block Visibility
     classDef physicalNode fill:#115e59,stroke:#14b8a6,stroke-width:3px,color:#ffffff,font-size:14px;
+    classDef gatewayNode fill:#065f46,stroke:#34d399,stroke-width:3px,color:#ffffff,font-size:14px;
     classDef fpgaNode fill:#581c87,stroke:#a855f7,stroke-width:3px,color:#ffffff,font-size:14px;
     classDef npuNode fill:#0369a1,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:14px;
     classDef supervisorNode fill:#1e1b4b,stroke:#818cf8,stroke-width:3px,color:#ffffff,font-size:15px;
@@ -92,6 +99,7 @@ flowchart TD
     classDef channelNode fill:#854d0e,stroke:#facc15,stroke-width:3px,color:#ffffff,font-size:14px;
 
     class ESP32 physicalNode;
+    class LoRaRx gatewayNode;
     class FPGA fpgaNode;
     class Vision,Whisper npuNode;
     class Supervisor supervisorNode;
