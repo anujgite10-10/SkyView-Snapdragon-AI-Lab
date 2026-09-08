@@ -173,56 +173,63 @@ Dashboard runs at `http://localhost:5173`.
 
 ```
 .
-├── skyview/                    # Python Backend Package
-│   ├── main.py                 # FastAPI orchestrator + router registration
-│   ├── api/                    # Route Handlers
-│   │   ├── vision_routes.py    # Qualcomm AI Hub crop disease & NPU telemetry
+├── skyview/                    # Python Backend Core (Snapdragon® Workstation)
+│   ├── main.py                 # FastAPI orchestrator + router lifecycle
+│   ├── api/                    # Route Handlers & Subsystems
+│   │   ├── vision_routes.py    # Qualcomm® AI Hub MobileNetV4 foliar disease & Hexagon™ NPU metrics
+│   │   ├── voice_routes.py     # Qualcomm® AI Hub Whisper-Base STT & speech pipeline
+│   │   ├── voice_agent.py      # Vernacular voice interaction agent loop
 │   │   ├── edge_routes.py      # Snapdragon Edge AI gateway status & health
-│   │   ├── sensor_routes.py    # Sensor ingest + history + trends
-│   │   ├── chat_routes.py      # Multi-agent conversational AI chat
-│   │   ├── advisor_routes.py   # Category-based agronomic advisory
-│   │   ├── mandi_routes.py     # Live commodity mandi rates + MSP
-│   │   ├── fpga_routes.py      # AMD Zynq-7000 FPGA co-processor bridge
-│   │   ├── voice_routes.py     # Whisper STT + Sarvam AI regional TTS
-│   │   ├── voice_agent.py      # Vernacular voice interaction agent
-│   │   ├── profile_routes.py   # Farmer profiles + government schemes
-│   │   ├── marketplace_routes.py # Cooperative barter marketplace matching
-│   │   ├── auth_routes.py      # OTP verification & authentication
-│   │   └── webhook_routes.py   # Twilio WhatsApp webhook integration
-│   ├── agents/                 # Agentic Intelligence
-│   │   ├── snapdragon_ai_hub.py # Qualcomm AI Hub model runner (Hexagon NPU)
-│   │   ├── supervisor.py       # Multi-agent orchestrator
-│   │   ├── edge_ai_agent.py    # On-device LLM invocation & FPGA fusion
-│   │   ├── fpga_agent.py       # Hardware serial bridge for FPGA
-│   │   └── mandi_agent.py      # Mandi price fetcher with caching
-│   ├── data/                   # Database & ORM
-│   │   ├── db.py               # Engine & session management
-│   │   ├── schema.py           # Table models & automatic migration
-│   │   └── seed.py             # Mandi & station seed data
-│   └── utils/                  # Utilities
-│       ├── config.py           # Snapdragon & system configuration
+│   │   ├── sensor_routes.py    # LoRa sensor ingest + telemetry history + trend analytics
+│   │   ├── chat_routes.py      # Multi-agent conversational AI chat endpoint
+│   │   ├── advisor_routes.py   # Multi-agent agronomic recommendations (irrigation & nutrition)
+│   │   ├── mandi_routes.py     # Live agricultural commodity mandi rates & MSP
+│   │   ├── fpga_routes.py      # AMD Zynq-7000 FPGA co-processor bridge & UART controls
+│   │   ├── profile_routes.py   # Farmer profiles & government agricultural schemes
+│   │   ├── marketplace_routes.py # Cooperative barter & peer-to-peer equipment sharing
+│   │   ├── auth_routes.py      # Phone OTP verification & authentication
+│   │   └── webhook_routes.py   # Automated WhatsApp conversational bot integration
+│   ├── agents/                 # Multi-Agent Edge Intelligence Core
+│   │   ├── supervisor.py       # Master Agent orchestrator (routes to specialist agents)
+│   │   ├── snapdragon_ai_hub.py # Foliar Vision Agent & Qualcomm AI Hub QNN model runner
+│   │   ├── edge_ai_agent.py    # On-device Llama 3.2-1B LLM (26.4 tok/s) & FPGA context fusion
+│   │   ├── agricultural_qa.py  # Farm Advisor & Autonomous Monitoring knowledge agent
+│   │   ├── fpga_agent.py       # Hardware UART bridge for AMD Zynq FPGA (0.16 ms fusion)
+│   │   └── mandi_agent.py      # Mandi Commodity Market Intelligence Agent
+│   ├── data/                   # Database & Storage Layer
+│   │   ├── db.py               # SQLite engine & session management (Offline-native)
+│   │   ├── schema.py           # Relational schema & automatic table migrations
+│   │   └── seed.py             # Mandi commodity baseline & weather station seed data
+│   └── utils/                  # Core Utilities
+│       ├── config.py           # Snapdragon hardware & environment configuration
 │       ├── llm_pool.py         # Multi-key round-robin fallback balancer
-│       └── logger.py           # Structured logging
+│       └── logger.py           # High-throughput structured diagnostic logging
 │
-├── hardware/                   # FPGA Hardware Co-processor (AMD Zynq-7000)
-│   ├── sensor_fusion.cpp       # Vitis HLS synthesizable sensor fusion
-│   ├── rain_predictor.cpp      # Vitis HLS synthesizable rain neural net
-│   ├── sensor_fusion.v         # Verilog RTL implementation
-│   └── sensor_fusion_axi.v     # AXI4-Lite register interface
+├── frontend/                   # React 18 On-Farm Command Dashboard
+│   ├── src/                    # 3D Digital Twin, live charts, Leaf Scan UI, & telemetry maps
+│   ├── package.json            # Node.js dependencies (React, Vite, Lucide, TailwindCSS)
+│   └── vite.config.ts          # Vite build configuration
 │
-├── skyview_flutter_app/        # Multilingual Flutter Mobile App
-│   └── skyview_flutter/        # 7-language vernacular client + voice UI
+├── hardware/                   # AMD Zynq-7000 FPGA Co-processor Subsystem
+│   ├── hls/                    # Vitis HLS synthesizable C++ kernels (sensor fusion & rain predictor)
+│   ├── rtl/                    # Synthesized Verilog RTL IP cores & AXI4-Lite slave registers
+│   └── ip_repo/                # Packaged Vivado IP blocks for Zynq processing system
 │
-├── tests/                      # Automated Test Suite
-│   ├── conftest.py             # Pytest fixtures & mock clients
-│   └── test_api.py             # API route test coverage
+├── skyview_flutter_app/        # Vernacular Mobile Client (Android APK)
+│   └── skyview_flutter/        # 7 Indian languages, offline cache, Whisper voice UI & leaf camera
 │
-├── infra/                      # Deployment & Docker configuration
-│   ├── Dockerfile.backend      # Containerized backend
-│   ├── Dockerfile.frontend     # Containerized React frontend
-│   └── requirements.txt        # Pinned Python dependencies
+├── tests/                      # Automated Verification & Test Suite
+│   ├── conftest.py             # Pytest fixtures & hardware mock clients
+│   ├── test_all_routes.py      # Comprehensive API endpoint route coverage
+│   ├── test_api.py             # Core diagnostic & telemetry API validation
+│   └── test_ingestion.py       # LoRa packet ingestion & database pipeline tests
 │
-└── README.md                   # Project documentation
+├── infra/                      # Containerization & Deployment
+│   ├── Dockerfile.backend      # Containerized Snapdragon backend service
+│   ├── Dockerfile.frontend     # Production bundle server for React dashboard
+│   └── requirements.txt        # Pinned Python dependencies (QNN, DirectML, FastAPI, etc.)
+│
+└── README.md                   # Complete system architectural documentation
 ```
 
 ---
