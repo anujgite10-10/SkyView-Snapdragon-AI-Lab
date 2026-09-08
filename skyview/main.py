@@ -1,0 +1,159 @@
+"""
+SkyView Smart Agriculture — FastAPI Application
+Entry point. Thin orchestrator — logic lives in routers/agents.
+"""
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from skyview.utils.config import get_settings
+from skyview.utils.logger import get_logger, setup_logging
+from skyview.data.db import init_db
+
+setup_logging()
+logger = get_logger(__name__)
+settings = get_settings()
+
+app = FastAPI(
+    title="SkyView Smart Agriculture API",
+    version="2.0.0",
+    description="Multi-agent IoT + AI agricultural platform",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.on_event("startup")
+def on_startup():
+    logger.info("=" * 55)
+    logger.info("🌾 SkyView Backend v2.0 starting (Arduino Q Agentic AI Gateway)…")
+    logger.info("=" * 55)
+    logger.info("Groq keys configured: %d", len(settings.GROQ_API_KEYS))
+
+    try:
+        init_db()
+    except Exception as exc:
+        logger.warning("DB init warning: %s", exc)
+
+    # Ensure users table always exists (safe fallback)
+    from skyview.data.db import get_session
+    from sqlalchemy import text
+    try:
+        db = get_session()
+        db.execute(text("""
+            CREATE TABLE IF NOT EXISTS users (
+                phone VARCHAR(20) PRIMARY KEY,
+                name VARCHAR(100),
+                land_size_acres FLOAT,
+                location VARCHAR(200),
+                crops TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """))
+        db.commit()
+
+        # Add new marketplace/geographic columns if they don't exist
+        for col, col_type in [
+            ("latitude", "DOUBLE PRECISION"),
+            ("longitude", "DOUBLE PRECISION"),
+            ("state", "VARCHAR(100)"),
+            ("district", "VARCHAR(100)"),
+            ("excess_resources", "TEXT"),
+            ("required_resources", "TEXT"),
+            ("whatsapp_number", "VARCHAR(20)")
+        ]:
+            try:
+                db.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} {col_type}"))
+                db.commit()
+            except Exception as col_exc:
+                logger.warning("Could not add column %s to users: %s", col, col_exc)
+
+        db.close()
+    except Exception as exc:
+        logger.warning("Users table check: %s", exc)
+
+    # Add FPGA hardware acceleration columns to weather_data if they don't exist
+    try:
+        db = get_session()
+        for col, col_type in [
+            ("data_quality", "VARCHAR(20) DEFAULT 'unknown'"),
+            ("edge_fusion_score", "FLOAT"),
+            ("edge_stress_index", "FLOAT"),
+            ("edge_rain_prob", "FLOAT"),
+            ("edge_anomaly_score", "FLOAT"),
+            ("edge_model_version", "VARCHAR(50)"),
+            ("edge_inference_ms", "INTEGER"),
+        ]:
+            try:
+                db.execute(text(f"ALTER TABLE weather_data ADD COLUMN IF NOT EXISTS {col} {col_type}"))
+                db.commit()
+            except Exception:
+                db.rollback()
+        db.close()
+    except Exception as exc:
+        logger.warning("Edge AI column migration: %s", exc)
+
+
+# ── Router registration ───────────────────────────────────────────────────────
+
+def _register(module_path: str, attr: str = "router", prefix: str = ""):
+    try:
+        import importlib
+        mod = importlib.import_module(module_path)
+        router = getattr(mod, attr)
+        app.include_router(router, prefix=prefix)
+        logger.info("✅ Registered: %s", module_path)
+    except Exception as exc:
+        logger.warning("⚠️  Could not register %s: %s", module_path, exc)
+
+
+# Core system routes
+_register("skyview.api.core_routes")
+
+# Sensor / IoT routes
+_register("skyview.api.sensor_routes")
+
+# Auth
+_register("skyview.api.auth_routes")
+
+# AI / Chat
+_register("skyview.api.chat_routes")
+
+# FPGA hardware accelerator (AMD ZYNQ-7000 via UART)
+_register("skyview.api.fpga_routes")
+
+# Farm advisor
+_register("skyview.api.advisor_routes")
+
+# Mandi rates
+_register("skyview.api.mandi_routes")
+
+# WhatsApp webhooks
+_register("skyview.api.webhook_routes")
+
+# Voice / speech / translation
+_register("skyview.api.voice_routes")
+
+# Agentic voice orchestration (Sarvam STT/TTS + multi-step agent)
+_register("skyview.api.voice_agent")
+
+# Farmer profile & government schemes
+_register("skyview.api.profile_routes")
+
+# Marketplace matching
+_register("skyview.api.marketplace_routes")
+
+# Arduino Q / Snapdragon Agentic AI Gateway (on-device LLM + FPGA UART bridge)
+_register("skyview.api.edge_routes")
+
+# Qualcomm AI Hub — Snapdragon Vision & NPU Routes
+_register("skyview.api.vision_routes")
+
+# Admin panel
+_register("skyview.admin.admin_routes")
