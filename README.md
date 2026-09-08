@@ -26,42 +26,70 @@ Built for the **Snapdragon® AI Lab Build & Present Challenge**.
 
 ```mermaid
 flowchart TD
-    subgraph Physical["Physical Field Sensing Layer"]
-        ESP32["Solar ESP32 Weather Station<br/>(12+ Environmental Transducers)"]
-        FPGA["AMD Zynq-7000 FPGA Co-Processor<br/>(0.16 ms Sensor Fusion & Rain IP)"]
-        ESP32 -->|"LoRa 868 MHz (3.2 km)"| FPGA
+    subgraph Physical["🌾 Physical Field Sensing & Pre-Processing"]
+        ESP32["🌱 Solar ESP32 Weather Station<br/>(12+ Micro-Climate Transducers)"]
+        FPGA["⚡ AMD Zynq-7000 FPGA Co-Processor<br/>(0.16 ms Sensor Fusion & Rain IP Core)"]
+        ESP32 ==>|"LoRa 868 MHz (3.2 km RF Link)"| FPGA
     end
 
-    subgraph PC["Snapdragon-Powered HP PC (Qualcomm Snapdragon X Elite)"]
-        subgraph AI_Hub["Qualcomm® AI Hub on Hexagon™ NPU (45 TOPS)"]
-            Vision["MobileNetV4 Crop Pathology Model<br/>(4.8 ms Latency, INT8 QNN, 96.2% Accuracy)"]
-            Whisper["Whisper Speech-to-Text Engine<br/>(On-Device Vernacular STT)"]
+    subgraph SnapdragonPC["💻 Snapdragon-Powered HP PC Workstation (Snapdragon X Elite)"]
+        subgraph AI_Hub["⚡ Qualcomm® AI Hub on Hexagon™ NPU (45 TOPS)"]
+            Vision["👁️ MobileNetV4 Crop Pathology Model<br/>(4.8 ms INT8 QNN Inference • 96.2% Accuracy)"]
+            Whisper["🎙️ Whisper Speech-to-Text Engine<br/>(On-Device Vernacular STT on NPU)"]
         end
 
-        subgraph Core["Multimodal Farm Decision Engine"]
-            Supervisor["Multi-Agent Supervisor<br/>(Agronomic Advisor, Weather, Alert, Mandi)"]
-            LLM["On-Device Llama 3.2-1B LLM<br/>(Local Native Inference)"]
-            DB[("Local Time-Series Database<br/>(Telemetry & Diagnostic Records)")]
+        subgraph Core["🧠 Multi-Agent Edge Intelligence Core"]
+            Supervisor["🎯 Multi-Agent Supervisor<br/>(Agronomic Orchestrator & Decision Engine)"]
+            LLM["🤖 On-Device Llama 3.2-1B LLM<br/>(26.4 tok/s Local Edge Reasoning)"]
+            DB[("💾 Local Time-Series Database<br/>(Offline Telemetry & Diagnostic Store)")]
         end
     end
 
-    subgraph Outputs["Farmer Delivery Channels"]
-        Dashboard["Native React Dashboard<br/>(Interactive PC Touchscreen)"]
-        MobileApp["SkyView Flutter Mobile App<br/>(Regional Vernacular Client)"]
-        WhatsApp["WhatsApp Bot Assistant<br/>(Zero-Install Messaging)"]
-        VoiceAgent["Automated Voice Agent<br/>(Sarvam Regional TTS Calls)"]
+    subgraph Outputs["🚜 Farmer Delivery Channels"]
+        Dashboard["🖥️ Native PC Dashboard<br/>(Interactive 3D Touchscreen UI)"]
+        MobileApp["📱 SkyView Mobile App<br/>(Flutter • 7 Indian Languages)"]
+        WhatsApp["💬 WhatsApp Bot Assistant<br/>(Zero-Install Conversational AI)"]
+        VoiceAgent["📞 Automated Voice Agent<br/>(Sarvam AI Regional Vernacular Calls)"]
     end
 
-    FPGA -->|"USB/UART Telemetry Stream"| Core
-    Vision -->|"Pathogen Diagnosis & Severity"| Supervisor
-    Supervisor <--> LLM
-    Supervisor <--> DB
+    %% Telemetry Ingestion Pipeline
+    FPGA ==>|"Verified Telemetry Stream (USB/UART)"| Supervisor
+    FPGA -.->|"Telemetry Historical Log"| DB
 
-    Core --> Dashboard
-    Core --> MobileApp
-    Core --> WhatsApp
-    Whisper --> Supervisor
-    Core --> VoiceAgent
+    %% Qualcomm AI Hub Inference Flow
+    Vision ==>|"Pathogen Diagnosis & Severity Vector"| Supervisor
+    Whisper ==>|"Vernacular Spoken Intent"| Supervisor
+
+    %% On-Device Agentic Reasoning
+    Supervisor <===>|"Context Injection & Advisory Synthesis"| LLM
+    Supervisor <===>|"Historical Trend Analysis"| DB
+
+    %% Farmer Dispatch Channels
+    Supervisor ==>|"Interactive Telemetry & Disease Map"| Dashboard
+    Supervisor ==>|"Hyperlocal Advisory & Push Alerts"| MobileApp
+    Supervisor ==>|"Diagnostic Reports & Weather Warnings"| WhatsApp
+    Supervisor ==>|"Synthesized Voice Call Dispatch"| VoiceAgent
+
+    %% User Input Loops to AI Hub
+    MobileApp -.->|"Crop Leaf Photo"| Vision
+    MobileApp -.->|"Farmer Spoken Audio"| Whisper
+
+    %% Custom Color Themes
+    classDef physicalNode fill:#134e4a,stroke:#2dd4bf,stroke-width:2px,color:#ffffff;
+    classDef fpgaNode fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#ffffff;
+    classDef npuNode fill:#0c4a6e,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef supervisorNode fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#ffffff;
+    classDef llmNode fill:#312e81,stroke:#a78bfa,stroke-width:2px,color:#ffffff;
+    classDef dbNode fill:#1f2937,stroke:#9ca3af,stroke-width:2px,color:#ffffff;
+    classDef channelNode fill:#78350f,stroke:#fbbf24,stroke-width:2px,color:#ffffff;
+
+    class ESP32 physicalNode;
+    class FPGA fpgaNode;
+    class Vision,Whisper npuNode;
+    class Supervisor supervisorNode;
+    class LLM llmNode;
+    class DB dbNode;
+    class Dashboard,MobileApp,WhatsApp,VoiceAgent channelNode;
 ```
 
 ---
