@@ -26,13 +26,12 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
           channel: 'stable'
           cache: true
 
       - name: Install dependencies
         working-directory: skyview_flutter_app/skyview_flutter
-        run: flutter pub get
+        run: flutter pub get --verbose
 
       - name: Build Release APK
         working-directory: skyview_flutter_app/skyview_flutter

@@ -35,7 +35,6 @@ dependencies:
   # UI helpers
   flutter_markdown: ^0.7.4
   pinput: ^3.0.1           # OTP input
-  lottie: ^3.1.2
   shimmer: ^3.0.0
   google_fonts: ^6.2.1
 
@@ -48,14 +47,7 @@ dependencies:
   pdf: ^3.12.0
   share_plus: ^12.0.2
   url_launcher: ^6.3.2
-
-  # Offline database & Sync
-  powersync: ^1.6.0
-  sqlite3_flutter_libs: ^0.5.24
   connectivity_plus: ^6.0.3
-
-  # Offline Local LLM (Gemma)
-  flutter_gemma: ^0.1.2
 
 dev_dependencies:
   flutter_test:
@@ -77,10 +69,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/lottie/
     - assets/translations/
-dependency_overrides:
-  record_platform_interface: 1.0.0
+
 
 
 
