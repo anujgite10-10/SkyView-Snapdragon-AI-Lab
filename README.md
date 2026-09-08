@@ -26,85 +26,75 @@ Built for the **Snapdragon® AI Lab Build & Present Challenge**.
 
 ```mermaid
 flowchart TD
-    subgraph FieldLayer["REMOTE PHYSICAL SENSING LAYER"]
-        ESP32["<b>SOLAR ESP32 WEATHER STATION</b><br/><br/>12+ Micro-Climate Environmental Transducers<br/>Temperature • Humidity • Soil Moisture • Rain • Wind<br/>Encrypted LoRa 868 MHz Transmitter"]
+    subgraph SensingLayer["1. REMOTE PHYSICAL SENSING LAYER"]
+        ESP32["<b>SOLAR ESP32 WEATHER STATION</b><br/>12+ Environmental Sensors • Temperature • Humidity • Soil Moisture • Rain • Wind<br/>Encrypted LoRa 868 MHz Long-Range Transmitter"]
     end
 
-    subgraph SnapdragonPC["SNAPDRAGON-POWERED HP PC WORKSTATION (QUALCOMM SNAPDRAGON X ELITE)"]
-        LoRaRx["<b>LORA RECEIVER GATEWAY</b><br/><br/>ESP32 USB/Serial Node (868 MHz)<br/>Direct Telemetry Ingestion to Host PC"]
+    subgraph SnapdragonPC["2. SNAPDRAGON-POWERED HP PC WORKSTATION (QUALCOMM SNAPDRAGON X ELITE)"]
+        LoRaRx["<b>LORA RECEIVER GATEWAY</b><br/>ESP32 USB/Serial Node (868 MHz) • Direct Host Ingestion"]
 
-        subgraph AI_Hub["QUALCOMM AI HUB ON HEXAGON NPU (45 TOPS)"]
-            Vision["<b>CROP PATHOLOGY VISION MODEL</b><br/><br/>MobileNetV4 / YOLOv8 INT8 Quantized QNN<br/>4.8 ms Inference Latency on Hexagon NPU<br/>96.2% Top-1 Disease Classification Accuracy"]
-            
-            Whisper["<b>ON-DEVICE WHISPER STT ENGINE</b><br/><br/>Hardware-Accelerated Multilingual Speech Recognition<br/>Zero Cloud Latency Vernacular Audio Processing"]
+        subgraph MultiAgentCore["MULTI-AGENT INTELLIGENCE CORE"]
+            LLM["<b>ON-DEVICE LLAMA 3.2-1B</b><br/>26.4 tok/s • Vernacular Reasoning<br/>Zero Cloud Dependency"]
+            Supervisor["<b>MULTI-AGENT SUPERVISOR & DECISION ENGINE</b><br/>Autonomous Agronomic Orchestration<br/>Multimodal Context & Telemetry Fusion"]
+            DB[("<b>LOCAL DATABASE</b><br/>SQLite Offline Diagnostics<br/>Historical Sensor Baseline")]
         end
 
-        subgraph Core["MULTI-AGENT EDGE INTELLIGENCE CORE"]
-            Supervisor["<b>MULTI-AGENT SUPERVISOR & DECISION ENGINE</b><br/><br/>Agronomic Orchestrator • Context Fusion<br/>Correlates Foliar Vision with Hyperlocal Telemetry<br/>Autonomous Irrigation & Pathology Advisory"]
-            
-            LLM["<b>ON-DEVICE LLAMA 3.2-1B LLM</b><br/><br/>Local Native Inference (26.4 tokens/sec)<br/>Context-Aware Vernacular Reasoning<br/>Zero Cloud Dependency & Zero API Cost"]
-            
-            DB[("<b>LOCAL TIME-SERIES DATABASE</b><br/><br/>SQLite / Offline Diagnostic Store<br/>Historical Trend Analysis & Baseline Logs")]
+        subgraph DualSilicon["DUAL-SILICON HARDWARE ACCELERATION"]
+            subgraph NPU_Engine["QUALCOMM® HEXAGON™ NPU (45 TOPS)"]
+                Vision["<b>CROP PATHOLOGY (AI HUB)</b><br/>MobileNetV4 INT8 QNN<br/>4.8 ms Latency • 96.2% Accuracy"]
+                Whisper["<b>WHISPER-BASE STT (AI HUB)</b><br/>On-Device Multilingual Speech<br/>Zero-Cloud Latency Audio Processing"]
+            end
+
+            subgraph FPGA_Engine["AMD ZYNQ-7000 FPGA CO-PROCESSOR"]
+                FPGA["<b>PARALLEL ML ACCELERATOR</b><br/>Sensor Fusion (0.16 ms) • Rain IP (0.21 ms)<br/>4.22x Hardware Speedup (UART Bridge)"]
+            end
         end
     end
 
-    subgraph HardwareAcc["HARDWARE CO-PROCESSOR SUBSYSTEM"]
-        FPGA["<b>AMD ZYNQ-7000 FPGA CO-PROCESSOR</b><br/><br/>Hardware Parallel Sensor Fusion & Rain IP Core<br/>0.16 ms Synthesized Pipeline Latency<br/>4.22x Measured Acceleration over CPU"]
+    subgraph Outputs["3. FARMER DELIVERY & INTERACTION CHANNELS"]
+        Dashboard["<b>NATIVE HP PC DASHBOARD</b><br/>React 18 3D Digital Twin<br/>Touchscreen Command UI"]
+        MobileApp["<b>SKYVIEW MOBILE CLIENT</b><br/>Flutter App (7 Indian Languages)<br/>Offline Cache & Camera Scan"]
+        WhatsApp["<b>WHATSAPP CONVERSATIONAL BOT</b><br/>Automated Diagnostic Reports<br/>Zero-Install Farmer Access"]
+        VoiceAgent["<b>VOICE ADVISORY ASSISTANT</b><br/>Whisper STT + Regional Audio<br/>Direct Vernacular Guidance"]
     end
 
-    subgraph Outputs["FARMER DELIVERY & INTERACTION CHANNELS"]
-        Dashboard["<b>NATIVE HP PC DASHBOARD</b><br/><br/>Interactive React 18 3D Digital Twin<br/>Real-Time Touchscreen Farm Command UI"]
-        
-        MobileApp["<b>SKYVIEW MOBILE CLIENT</b><br/><br/>Flutter Android App (7 Indian Languages)<br/>Offline Cache & Voice-First Input"]
-        
-        WhatsApp["<b>WHATSAPP CONVERSATIONAL BOT</b><br/><br/>Zero-Install Diagnostic Assistant<br/>Automated Crop Health & Weather Alerts"]
-        
-        VoiceAgent["<b>AUTOMATED VOICE ADVISORY</b><br/><br/>Sarvam AI Regional Text-to-Speech<br/>Direct Vernacular Audio Phone Calls"]
-    end
-
-    %% Remote Sensing to PC Gateway
-    ESP32 ==>|"LoRa 868 MHz Long-Range Link (3.2 km)"| LoRaRx
+    %% Tier 1 to Tier 2 Ingestion
+    ESP32 ==>|"LoRa 868 MHz Link (3.2 km)"| LoRaRx
     LoRaRx ==>|"Serial Telemetry Ingestion"| Supervisor
-    LoRaRx -.->|"Raw Sensor Archive"| DB
+    LoRaRx -.->|"Telemetry Archive"| DB
 
-    %% On-Demand FPGA Acceleration via UART
-    Supervisor <==>|"On-Demand Telemetry Query & 0.16ms Accelerated Result (UART)"| FPGA
+    %% Internal Multi-Agent Reasoning Loop
+    Supervisor <==>|"Reasoning Loop"| LLM
+    Supervisor <==>|"Baseline Queries"| DB
 
-    %% Qualcomm AI Hub NPU Diagnostics
-    Vision ==>|"Foliar Pathogen Vector & Severity"| Supervisor
-    Whisper ==>|"Transcribed Vernacular Voice Queries"| Supervisor
-
-    %% On-Device Agentic Reasoning Loop
-    Supervisor <===>|"Multimodal Context & Advisory Synthesis"| LLM
-    Supervisor <===>|"Historical Baseline & Sensor Queries"| DB
+    %% Dual-Silicon Acceleration Loops
+    Supervisor <==>|"Foliar Pathogen Vector"| Vision
+    Supervisor <==>|"Transcribed Voice Queries"| Whisper
+    Supervisor <==>|"On-Demand UART Ingestion (0.16ms)"| FPGA
 
     %% Multi-Channel Farmer Delivery
-    Supervisor ==>|"Telemetry Visuals & Disease Mapping"| Dashboard
-    Supervisor ==>|"Hyperlocal Advisories & Push Alerts"| MobileApp
-    Supervisor ==>|"Automated WhatsApp Advisory Reports"| WhatsApp
-    Supervisor ==>|"Vernacular Spoken Outbound Calls"| VoiceAgent
-
-    %% Farmer Input Feedback Loops
-    MobileApp -.->|"Crop Leaf Photographs"| Vision
-    MobileApp -.->|"Spoken Farmer Audio Notes"| Whisper
+    Supervisor ==> Dashboard
+    Supervisor ==> MobileApp
+    Supervisor ==> WhatsApp
+    Supervisor ==> VoiceAgent
 
     %% High-Contrast Styling & Increased Block Visibility
     classDef physicalNode fill:#115e59,stroke:#14b8a6,stroke-width:3px,color:#ffffff,font-size:14px;
     classDef gatewayNode fill:#065f46,stroke:#34d399,stroke-width:3px,color:#ffffff,font-size:14px;
-    classDef fpgaNode fill:#581c87,stroke:#a855f7,stroke-width:3px,color:#ffffff,font-size:14px;
-    classDef npuNode fill:#0369a1,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:14px;
     classDef supervisorNode fill:#1e1b4b,stroke:#818cf8,stroke-width:3px,color:#ffffff,font-size:15px;
     classDef llmNode fill:#312e81,stroke:#c084fc,stroke-width:3px,color:#ffffff,font-size:14px;
     classDef dbNode fill:#1f2937,stroke:#9ca3af,stroke-width:3px,color:#ffffff,font-size:14px;
+    classDef npuNode fill:#0369a1,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:14px;
+    classDef fpgaNode fill:#581c87,stroke:#a855f7,stroke-width:3px,color:#ffffff,font-size:14px;
     classDef channelNode fill:#854d0e,stroke:#facc15,stroke-width:3px,color:#ffffff,font-size:14px;
 
     class ESP32 physicalNode;
     class LoRaRx gatewayNode;
-    class FPGA fpgaNode;
-    class Vision,Whisper npuNode;
     class Supervisor supervisorNode;
     class LLM llmNode;
     class DB dbNode;
+    class Vision,Whisper npuNode;
+    class FPGA fpgaNode;
     class Dashboard,MobileApp,WhatsApp,VoiceAgent channelNode;
 ```
 
