@@ -5,7 +5,7 @@ An end-to-end intelligent physical-to-intelligence agriculture platform designed
 Built for the **Snapdragon® AI Lab Build & Present Challenge**.  
 **Sole Developer & Participant:** Anuj Gite ([anuj.gite23@spit.ac.in](mailto:anuj.gite23@spit.ac.in))  
 **Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://google-hack-kgp5.vercel.app/)  
-**Direct Mobile APK Download:** [Download SkyView_AI-1.apk](./SkyView_AI-1.apk)
+**Direct Mobile APK Download:** [Download SkyView Mobile App (Google Drive)](https://drive.google.com/file/d/1sBlVT3V_VYpfahyRdAkAvfb5W17AWczf/view?usp=sharing)
 
 ---
 
@@ -32,8 +32,6 @@ flowchart TD
         ESP32 -->|"LoRa 868 MHz (3.2 km)"| FPGA
     end
 
-    Camera["Field Camera / Smartphone Capture<br/>(Crop Foliar Photos)"]
-
     subgraph PC["Snapdragon-Powered HP PC (Qualcomm Snapdragon X Elite)"]
         subgraph AI_Hub["Qualcomm® AI Hub on Hexagon™ NPU (45 TOPS)"]
             Vision["MobileNetV4 Crop Pathology Model<br/>(4.8 ms Latency, INT8 QNN, 96.2% Accuracy)"]
@@ -49,17 +47,18 @@ flowchart TD
 
     subgraph Outputs["Farmer Delivery Channels"]
         Dashboard["Native React Dashboard<br/>(Interactive PC Touchscreen)"]
+        MobileApp["SkyView Flutter Mobile App<br/>(Regional Vernacular Client)"]
         WhatsApp["WhatsApp Bot Assistant<br/>(Zero-Install Messaging)"]
         VoiceAgent["Automated Voice Agent<br/>(Sarvam Regional TTS Calls)"]
     end
 
-    Camera -->|"Image Ingestion"| Vision
     FPGA -->|"USB/UART Telemetry Stream"| Core
     Vision -->|"Pathogen Diagnosis & Severity"| Supervisor
     Supervisor <--> LLM
     Supervisor <--> DB
 
     Core --> Dashboard
+    Core --> MobileApp
     Core --> WhatsApp
     Whisper --> Supervisor
     Core --> VoiceAgent
