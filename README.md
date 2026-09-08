@@ -1,4 +1,4 @@
-# 🌾 SkyView AI — Multimodal Snapdragon® Edge AI Workstation for Autonomous Smart Agriculture
+# SkyView AI — Multi-Agent Snapdragon® FPGA Accelerated Edge AI Workstation for Autonomous Smart Agriculture
 
 An end-to-end intelligent physical-to-intelligence agriculture platform designed, developed, and optimized for **Snapdragon®-powered HP PCs** leveraging the **Qualcomm® AI Hub**, combined with solar-powered IoT field telemetry and FPGA hardware co-processing.
 
