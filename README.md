@@ -280,7 +280,7 @@ Interactive OpenAPI documentation is available at `/docs` when the backend is ru
 ## 📱 Mobile Application
 
 A companion cross-platform Flutter application (`skyview_flutter_app/`) provides mobile access for farmers on the move:
-- **Direct APK Download**: [Download SkyView Mobile App (v1.0.0 APK)](https://github.com/anujgite10-10/SkyView-Snapdragon-AI-Lab/releases/latest)
+- **Direct APK Download**: [Download SkyView Mobile App (v1.0.0 APK)](https://drive.google.com/file/d/1sBlVT3V_VYpfahyRdAkAvfb5W17AWczf/view)
 - **Multilingual Support**: Supports 7 Indian regional languages (Hindi, Marathi, Tamil, Telugu, Punjabi, Bengali, and English).
 - **Voice-First Navigation**: Hands-free spoken queries powered by on-device Whisper transcription and Sarvam AI TTS.
 - **Offline Telemetry Caching**: Visualizes local weather station charts and alerts even in low-reception field pockets.
