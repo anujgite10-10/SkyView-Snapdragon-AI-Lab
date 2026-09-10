@@ -44,8 +44,28 @@ _ERROR_COOLDOWN_SEC = 60
 _MAX_ERRORS = 3
 
 
+def _refresh_keys() -> None:
+    """Refresh keys dynamically from settings or environment if not loaded."""
+    global _keys, _key_cycle
+    import os
+    cfg = get_settings()
+    if cfg.GROQ_API_KEYS:
+        _keys = list(cfg.GROQ_API_KEYS)
+    else:
+        raw = os.getenv("GROQ_API_KEYS", "") or os.getenv("GROQ_API_KEY", "")
+        raw = raw.strip().strip('"').strip("'")
+        _keys = [k.strip() for k in raw.split(",") if k.strip()]
+    _key_cycle = cycle(_keys) if _keys else iter([])
+
+
 def _next_healthy_key() -> Optional[str]:
     """Pick next key that is not in cooldown."""
+    global _keys, _key_cycle
+    if not _keys:
+        _refresh_keys()
+    if not _keys:
+        return None
+
     now = time.time()
 
     for _ in range(max(len(_keys), 1)):

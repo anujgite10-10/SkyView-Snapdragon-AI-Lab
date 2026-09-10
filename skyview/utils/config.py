@@ -18,13 +18,14 @@ from typing import List, Optional
 
 from dotenv import load_dotenv
 
-# Strictly load the skyview/.env file.
+# Load .env file from repo root or skyview directory.
 _CONFIG_DIR = Path(__file__).resolve().parent
 _SKYVIEW_DIR = _CONFIG_DIR.parent
+_REPO_ROOT = _SKYVIEW_DIR.parent
 
-_env_path = _SKYVIEW_DIR / ".env"
-if _env_path.exists():
-    load_dotenv(_env_path, override=True)
+for _candidate in [_REPO_ROOT / ".env", _SKYVIEW_DIR / ".env"]:
+    if _candidate.exists():
+        load_dotenv(_candidate, override=True)
 
 
 class Settings:
