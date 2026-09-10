@@ -15,6 +15,13 @@ CREATE TABLE IF NOT EXISTS users (
     land_size_acres FLOAT,
     location VARCHAR(200),
     crops TEXT,
+    latitude FLOAT,
+    longitude FLOAT,
+    state VARCHAR(100),
+    district VARCHAR(100),
+    excess_resources TEXT,
+    required_resources TEXT,
+    whatsapp_number VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

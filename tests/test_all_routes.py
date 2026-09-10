@@ -29,7 +29,17 @@ import httpx
 import pytest
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000").rstrip("/")
-client   = httpx.Client(base_url=BASE_URL, timeout=30)
+try:
+    _ping = httpx.get(f"{BASE_URL}/health", timeout=0.3)
+    client = httpx.Client(base_url=BASE_URL, timeout=30)
+except Exception:
+    from fastapi.testclient import TestClient
+    from skyview.main import app
+    from skyview.data.schema import init_schema
+    init_schema()
+    _tc = TestClient(app)
+    _tc.__enter__()
+    client = _tc
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helpers

@@ -38,10 +38,12 @@ def on_startup():
 
     try:
         init_db()
+        from skyview.data.schema import init_schema
+        init_schema()
     except Exception as exc:
         logger.warning("DB init warning: %s", exc)
 
-    # Ensure users table always exists (safe fallback)
+    # Ensure users table always exists with all fields (safe fallback)
     from skyview.data.db import get_session
     from sqlalchemy import text
     try:
@@ -53,15 +55,22 @@ def on_startup():
                 land_size_acres FLOAT,
                 location VARCHAR(200),
                 crops TEXT,
+                latitude FLOAT,
+                longitude FLOAT,
+                state VARCHAR(100),
+                district VARCHAR(100),
+                excess_resources TEXT,
+                required_resources TEXT,
+                whatsapp_number VARCHAR(20),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """))
         db.commit()
 
-        # Add new marketplace/geographic columns if they don't exist
+        # Add new marketplace/geographic columns if they don't exist in older DBs
         for col, col_type in [
-            ("latitude", "DOUBLE PRECISION"),
-            ("longitude", "DOUBLE PRECISION"),
+            ("latitude", "FLOAT"),
+            ("longitude", "FLOAT"),
             ("state", "VARCHAR(100)"),
             ("district", "VARCHAR(100)"),
             ("excess_resources", "TEXT"),
@@ -69,10 +78,10 @@ def on_startup():
             ("whatsapp_number", "VARCHAR(20)")
         ]:
             try:
-                db.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} {col_type}"))
+                db.execute(text(f"ALTER TABLE users ADD COLUMN {col} {col_type}"))
                 db.commit()
-            except Exception as col_exc:
-                logger.warning("Could not add column %s to users: %s", col, col_exc)
+            except Exception:
+                db.rollback()
 
         db.close()
     except Exception as exc:
@@ -91,7 +100,7 @@ def on_startup():
             ("edge_inference_ms", "INTEGER"),
         ]:
             try:
-                db.execute(text(f"ALTER TABLE weather_data ADD COLUMN IF NOT EXISTS {col} {col_type}"))
+                db.execute(text(f"ALTER TABLE weather_data ADD COLUMN {col} {col_type}"))
                 db.commit()
             except Exception:
                 db.rollback()

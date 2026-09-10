@@ -212,6 +212,7 @@ async def ingest_sensor_data_nested(request: Request):
         "station_id": station_id,
         "timestamp": ts.isoformat(),
         "fpga_results": bool(edge_ai),
+        "edge_ai": bool(edge_ai),
     }
 
 

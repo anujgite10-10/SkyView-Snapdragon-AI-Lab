@@ -1,4 +1,4 @@
-﻿.env
+.env
 .env.pi
 __pycache__/
 *.pyc
@@ -28,5 +28,4 @@ AGENTS.md
 CLAUDE.md
 GEMINI.md
 backend/myenv/*
-
-
+*.db

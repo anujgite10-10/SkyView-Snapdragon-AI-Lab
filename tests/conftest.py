@@ -12,6 +12,11 @@ os.environ.setdefault("GROQ_API_KEY", "test_key")
 os.environ.setdefault("DEBUG", "True")
 
 from skyview.main import app  # noqa: E402 — env must be set before import
+from skyview.data.schema import init_schema
+try:
+    init_schema()
+except Exception:
+    pass
 
 
 @pytest.fixture(scope="session")
@@ -51,13 +56,8 @@ def mock_llm_invoke(monkeypatch):
         return "Mocked LLM Response"
     
     import skyview.utils.llm_pool
-    import skyview.api.marketplace_routes
-    import skyview.api.profile_routes
-    import skyview.api.chat_routes
-    import skyview.api.advisor_routes
+    import skyview.agents.edge_ai_agent
 
     monkeypatch.setattr(skyview.utils.llm_pool, "invoke_llm", mock_invoke)
-    monkeypatch.setattr(skyview.api.marketplace_routes, "invoke_llm", mock_invoke)
-    monkeypatch.setattr(skyview.api.profile_routes, "invoke_llm", mock_invoke)
-    monkeypatch.setattr(skyview.api.chat_routes, "invoke_llm", mock_invoke)
-    monkeypatch.setattr(skyview.api.advisor_routes, "invoke_llm", mock_invoke)
+    monkeypatch.setattr(skyview.agents.edge_ai_agent, "invoke_llm_edge_first", mock_invoke)
+    monkeypatch.setattr(skyview.agents.edge_ai_agent, "invoke_edge_llm", mock_invoke)

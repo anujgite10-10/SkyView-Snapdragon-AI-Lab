@@ -293,6 +293,8 @@ async def get_edge_ai_status() -> Dict[str, Any]:
         "edge_ai_enabled": settings.ENABLE_EDGE_AI,
         "arduino_q_host": settings.ARDUINO_Q_HOST,
         "arduino_q_port": settings.ARDUINO_Q_PORT,
+        "gateway_host": settings.ARDUINO_Q_HOST,
+        "gateway_port": settings.ARDUINO_Q_PORT,
         "on_device_llm": {
             "endpoint": settings.ARDUINO_Q_LLM_ENDPOINT,
             "model": settings.ARDUINO_Q_LLM_MODEL,

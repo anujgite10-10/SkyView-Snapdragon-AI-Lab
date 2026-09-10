@@ -18,7 +18,7 @@ POST /api/edge/chat             — Direct chat with Arduino Q on-device LLM
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 import httpx
@@ -142,8 +142,9 @@ def edge_data_quality(station_id: Optional[str] = None, hours: int = 24):
     Data quality analytics — counts readings by quality level,
     average FPGA fusion scores, and flagged sensor breakdown.
     """
-    where_clause = "WHERE timestamp >= NOW() - INTERVAL ':hours hours'"
-    params = {"hours": hours}
+    since = datetime.utcnow() - timedelta(hours=hours)
+    where_clause = "WHERE timestamp >= :since"
+    params = {"since": since}
     if station_id:
         where_clause += " AND station_id = :sid"
         params["sid"] = station_id
@@ -199,6 +200,7 @@ def edge_data_quality(station_id: Optional[str] = None, hours: int = 24):
         "total_readings": total,
         "quality_distribution": quality_dist,
         "fpga_accelerator_stats": fpga_stats,
+        "edge_ai_stats": fpga_stats,
         "timestamp": datetime.utcnow().isoformat(),
     }
 
@@ -226,7 +228,7 @@ async def push_alert_thresholds(thresholds: AlertThresholds):
                 json=payload,
             )
             return {
-                "status": "pushed" if resp.status_code == 200 else "failed",
+                "status": "pushed" if resp.status_code == 200 else "push_failed",
                 "http_status": resp.status_code,
                 "thresholds": payload,
                 "timestamp": datetime.utcnow().isoformat(),
