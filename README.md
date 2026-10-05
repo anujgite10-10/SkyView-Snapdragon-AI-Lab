@@ -4,7 +4,7 @@ An end-to-end intelligent physical-to-intelligence agriculture platform designed
 
 Built for the **Snapdragon® AI Lab Build & Present Challenge**.  
 **Sole Developer & Participant:** Anuj Gite ([anuj.gite23@spit.ac.in](mailto:anuj.gite23@spit.ac.in))  
-**Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://google-hack-kgp5.vercel.app/)  
+**Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://skyview-ai.vercel.app)  
 **Direct Mobile APK Download:** [Download SkyView Mobile App (Google Drive)](https://drive.google.com/file/d/1sBlVT3V_VYpfahyRdAkAvfb5W17AWczf/view?usp=sharing)
 
 
@@ -367,5 +367,5 @@ SkyView AI is engineered, compiled, and benchmarked specifically for **Snapdrago
 - **Sole Participant:** Anuj Gite
 - **Primary Target Silicon:** Qualcomm® Snapdragon® X Elite (45 TOPS Qualcomm® Hexagon™ NPU)
 - **AI Toolchain:** Qualcomm® AI Hub (QNN Execution Provider, ONNX Runtime)
-- **Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://google-hack-kgp5.vercel.app/)
+- **Live Deployed Platform:** [Snapdragon® AI Lab Build & Present Challenge](https://skyview-ai.vercel.app)
 - **Direct Android APK Download:** [Download SkyView Mobile App (Google Drive)](https://drive.google.com/file/d/1sBlVT3V_VYpfahyRdAkAvfb5W17AWczf/view?usp=sharing)
